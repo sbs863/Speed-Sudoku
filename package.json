@@ -1,0 +1,26 @@
+{
+    "name": "speedsudoku",
+    "version": "1.0.0",
+    "description": "We are designing a multiplayer speed Sudoku game. Two – four players will compete in real time to determine who can complete a Sudoku board the fastest. Users will be able to login so that stats can be remembered and tracked. As players solve the puzzle, their progress will be dynamically displayed, albeit obscured, to the other users.",
+    "main": "server.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node server.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/sbs863/Speed-Sudoku.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/sbs863/Speed-Sudoku/issues"
+    },
+    "homepage": "https://github.com/sbs863/Speed-Sudoku#readme",
+    "dependencies": {
+        "express": "^4.14.0",
+        "mysql2": "^1.1.1",
+        "path": "^0.12.7",
+        "socket.io": "^1.5.1"
+    }
+}
