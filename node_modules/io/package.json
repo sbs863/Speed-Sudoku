@@ -1,0 +1,51 @@
+{
+  "name": "io",
+  "version": "0.1.10",
+  "description": "io is a module for read or write in console",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "engines": {
+    "node": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/franciscofernando/io.git"
+  },
+  "author": {
+    "name": "franciscofernando",
+    "email": "hola@franciscofernando.com"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "basic-promise": "0.0.6"
+  },
+  "gitHead": "b83fbbab9f34932c39710b1ef9873cd296a940bd",
+  "bugs": {
+    "url": "https://github.com/franciscofernando/io/issues"
+  },
+  "homepage": "https://github.com/franciscofernando/io#readme",
+  "_id": "io@0.1.10",
+  "_shasum": "25f4280b199f91b299f4796186a77951b68a7a52",
+  "_from": "io@latest",
+  "_npmVersion": "1.4.28",
+  "_nodeVersion": "0.12.5",
+  "_npmUser": {
+    "name": "franciscofernando",
+    "email": "hola@franciscofernando.com"
+  },
+  "dist": {
+    "shasum": "25f4280b199f91b299f4796186a77951b68a7a52",
+    "tarball": "https://registry.npmjs.org/io/-/io-0.1.10.tgz"
+  },
+  "maintainers": [
+    {
+      "name": "franciscofernando",
+      "email": "francisco1994@gmail.com"
+    }
+  ],
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/io/-/io-0.1.10.tgz"
+}
