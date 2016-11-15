@@ -1,11 +1,12 @@
-#SpeedLogo{
-	transform: rotate(15deg);
-	width: 30%;
+#SpeedLogo2{
+	/*transform: rotate(15deg);*/
+	min-width: 30%;
+	max-width: 50%;
 	height: auto;
 	margin-top: 50px;
-	position: relative;
-	top: 50px;
-	z-index: -1;
+	/*position: relative;*/
+	/*top: 50px;*/
+	/*z-index: -1;*/
 }
 
 body{
