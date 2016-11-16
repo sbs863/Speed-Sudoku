@@ -1,0 +1,43 @@
+<head>
+    <title>{{title}} </title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- load fontawesome -->
+    <link rel="stylesheet" href="/public/stylesheets/reset.css">
+    <style>
+        body {
+            padding-top: 80px;
+        }
+    </style>
+</head>
+<div class="container">
+    <div class="col-sm-6 col-sm-offset-3">
+        <h1><span class="fa fa-sign-in"></span> Signup</h1>
+        <!-- show any messages that come back with authentication -->
+        {{#if errorMessage}}
+        <div class="alert alert-danger">
+            {{errorMessage}}
+        </div>
+        {{/if}}
+        <!-- LOGIN FORM -->
+        <form action="/signup" method="post">
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" class="form-control" name="Username" placeholder="Username">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
+            </div>
+            <div class="form-group">
+                <label>Repeat Password</label>
+                <input type="password" id="inputPassword2" name="password2" class="form-control" placeholder="Repeat Password" required>
+            </div>
+            <button type="submit" class="btn btn-warning btn-lg">Signup</button>
+        </form>
+        <hr>
+        <p>Already have an account? <a href="/login">Login</a></p>
+        <p>Or go <a href="/">home</a>.</p>
+    </div>
+</div>
