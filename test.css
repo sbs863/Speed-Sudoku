@@ -1,9 +1,12 @@
-#SpeedLogo2{
+#SpeedLogo{
 	/*transform: rotate(15deg);*/
 	min-width: 30%;
 	max-width: 50%;
-	height: auto;
-	margin-top: 50px;
+	/*height: auto;*/
+	/*margin-top: 50px;*/
+	margin: auto;
+	padding: 10px;
+	display: block;
 	/*position: relative;*/
 	/*top: 50px;*/
 	/*z-index: -1;*/
@@ -13,9 +16,13 @@ body{
 	background-image: url("PaperDecorative0028.jpg")
 }
 
-h1{
+/*h1{
 	font-weight: bold;
 	color: black;
 	font-family: serif;
 	-webkit-text-stroke: 1px white;
+}*/
+
+#container{
+	/*background: white;*/
 }
