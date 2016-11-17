@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title>Speed Sudoku Test Page</title>
-	<!-- <link href="bootstrap/css/bootstrap.css" rel="stylesheet"> -->
+	<link href="bootstrap/css/bootstrap.css" rel="stylesheet">
 	<link rel="stylesheet" href="game.css">
 	<link rel="stylesheet" type="text/css" href="test.css">
 	<script src="jquery-3.1.0.js"></script>
@@ -12,7 +12,7 @@
 	<script type="text/javascript">
 		$( document ).ready( function() {
 			var game = Sudoku.getInstance();
-			$( '#container').append( game.getGameBoard() );
+			$( '#gameContainer').append( game.getGameBoard() );
 
 			$( '#solve').click( function() {
 				game.solve();
@@ -25,18 +25,20 @@
 			} );
 		} );
 	</script>
+	<div class="container">
 		<div>
 			<img id="SpeedLogo" class="img center-block" src="SpeedLogo.png">
 			<!-- <h1 class="text-center">♦ S U D O K U ♦</h1> -->
 
 		</div>
 	
-		<div id="container"></div>
+		<div id="gameContainer"></div>
 		<div id="menu" class="sudoku-menu">
-			<button id="solve">Solve</button>
-			<button id="validate">Validate Board</button>
-			<button id="reset">Reset</button>
+			<button class="btn" id="solve">Solve</button>
+			<button class="btn" id="validate">Validate Board</button>
+			<button class="btn" id="reset">Reset</button>
 		</div>
+	</div>
 </body>
-	<!-- <script src="bootstrap/js/bootstrap.min.js"></script> -->
+	<script src="bootstrap/js/bootstrap.min.js"></script>
 </html>

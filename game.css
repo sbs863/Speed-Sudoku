@@ -20,13 +20,20 @@ button, h1 {
 	font-size: 24px;
 	margin: 10px;
 	padding: 5px;
+	background-color: black;
+	color: #ddd;
 }
 
 .sudoku-container {
 	border: 5px solid #666;
 	margin-left: auto;
 	margin-right: auto;
-	background-color: rgba(0,0,0);
+	background-color: white;
+}
+
+table.sudoku-container{
+	border-spacing: 3px;
+	border-collapse: separate;
 }
 
 .sudoku-container td {
