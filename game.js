@@ -2,6 +2,8 @@ var express = require('express');
 var app = express();
 var serv = require('http').Server(app);
 var path = require('path');
+var Player = require('./player.js');
+var Lobby = require('./lobby.js');
 
 var PlayerList = {};
 
@@ -14,41 +16,31 @@ app.get('/', function(req, res)
 app.use(express.static('client/'));
 serv.listen(2000); 
 var io = require('socket.io')(serv,{});
-var testArray =  [1,4,3,8,2,9,5,0,7,6];
+
+var rooms = ['room1','room2','room3'];
+
+var testArray =  [1,2,3,4,5,6,7,8,9,0];
 var testArray2 = [5,8,3,8,9,2,4,6,7,8];
 var testArray3 = ['','','',''];
-//console.log("length = " + testArray3.length);
 
 var tempArray = ['bill','john','mike','mando','sarah','pip','lucky','christy','katie','maddox','ella'];
 
-
-// player stuff
-var Player = function(id)
-{
-	var player = 
-	{
-	   name : tempArray[ Math.floor(10 * Math.random())],
-	   wins : 0,
-	   losses : 0,
-	   id : id,
-    }
-	// url of pic
-	//board = create board; need own board each time
-	// updatePlayer = function()
-	//                {
-	//                	// updade everyone boards, check winner!
-	//                }
-	return player;
-}
-
-
 var SOCKET_LIST = {};  
 var PLAYER_LIST = {};
-var USER_LIST   = {};
+var GAME_LIST   = {};
+var USER_LIST   = {
+                     bob :'abc',
+                     mike:'def',
+                     sam :'ghi',
 
-Player.connect = function(socket)
+                    };
+
+Player.connectPlayer = function(socket)
 {
     var player = Player(socket.id);
+    PLAYER_LIST[socket.id] = player;
+   
+    console.log(player.name + "player on connect");
 
 }
 Player.disconnect = function(socket)
@@ -57,46 +49,86 @@ Player.disconnect = function(socket)
     delete PLAYER_LIST[socket.id];
 }
 // acivated everytime someone goes to page
+
+var isValidPassword = function(data)
+{
+   return USER_LIST[data.name === data.passWord];
+}
+var isUserNameTaken = function(data)
+{
+   return USER_LIST[data.name];
+}
+var addUser = function(data)
+{
+  USER_LIST[data.name] == data.passWord;
+}
 io.sockets.on('connection', function(socket)
 {
+  var connectonCounter = 0; 
  	console.log("connected ");
- 	socket.id = Math.random();
- 	SOCKET_LIST[socket.id] = socket;  // this will give the each socket a name and put in list
-   // var player = new Player(socket.id);
-  Player.connect(socket);
-  socket.on('signIn', function(data)
-  {
-      console.log("user name = " + data.name);
-      if(data.name === "bob")
-      {
-         console.log("inside beb= ");
-       
-          // PLAYER_LIST[socket.id] = player;
-         console.log(PLAYER_LIST.length + 'player length');
-          socket.emit('signInResponce',{success:true});
-      }
-      else
-      {
-        socket.emit('signInResponce',{success:false});
-        console.log("no name in database");
-      }
-    }); 
+ 	socket.id = Math.random() * 100;
+ 	SOCKET_LIST[socket.id] = socket; 
+  Player.connectPlayer(socket);
+
+console.log(Object.keys(PLAYER_LIST).length + "player list length");
+
+  //var player = new Player(socket.id);
+  // console.log("player " + JSON.stringify(player));
+  //Player.connect(socket);
+  // socket.on('signIn', function(data)
+  // {
+  //     console.log("user name = " + data.name);
+  //     if(isValidPassword)
+  //     {
+  //        console.log("inside if beb= ");
+  //        Player.connectPlayer(socket);
+  //         // PLAYER_LIST[socket.id] = player;
+  //        //console.log(PLAYER_LIST.length + 'player length');
+  //         socket.emit('signInResponce',{success:true});
+  //     }
+  //     else
+  //     {
+  //       socket.emit('signInResponce',{success:false});
+  //     }
+  //   }); 
+  // socket.on('signUp', function(data)
+  // {
+  //   if(isUserNameTaken)
+  //   {
+  //      socket.emit('signInResponce',{success:false});
+  //   }
+  //   else
+  //   {
+  //     addUser(data);
+  //     socket.emit('signInResponce',{success:true});
+  //   }
+  // });
+   socket.join("room1");
+ //  console.log(io.sockets.clients().length + " client length");
 
    // console.log("socket name #1" + data.name);
   
  	 socket.on("numberPressed", function(data) // listens for number pressed
      {
-        console.log('array ' + data.array[0]);
+        for(var i in data.array)
+        {
+           console.log('array ' + data.array[i]);
+
+        }
+        var numberOfCorrect = checkArray(data.array,testArray);
+        console.log("numberPressed " + numberOfCorrect);
+        var percentComplete = (numberOfCorrect/testArray.length) * 100;
+        player.completed = percentComplete;
+        console.log(percentComplete + " pecent complerte");
+        if(percentComplete === 100)
+        {
+           console.log("winner");
+        }
      });
  //    sudo code
  //    if SOCKET_LIST == 4
  //    	start game();
 
-    socket.on('buttonListner', function(data)
-    {
- 	   console.log("someone pressed a button");
- 	   console.log(data.mess);
-    });
    
 
     socket.on('arrayTester', function(data)
@@ -104,11 +136,14 @@ io.sockets.on('connection', function(socket)
       var numberOfCorrect = checkArray(data,testArray);
       console.log("numberPressed " + numberOfCorrect);
       var percentComplete = (numberOfCorrect/testArray.length) * 100;
+
+      player.completed = percentComplete;
       if(percentComplete === 100)
       {
         console.log("winner");
       }
     })
+
     socket.emit('testFromServer',
     {
        message : 'hi from server'
@@ -145,7 +180,7 @@ var checkArray = function(ary1,ary2)
   var correctAnsewers = 0;
    for(var i = 0; i < ary1.length; i++)
    {
-      if(ary1[i] === ary2[i])
+      if(parseInt(ary1[i]) === parseInt(ary2[i]))
       { 
         correctAnsewers ++;
       }
@@ -175,10 +210,19 @@ setInterval(function()
     	var socket = SOCKET_LIST[i];
         socket.emit("updateBoard",packet); 
     }
+    if(Object.keys(PLAYER_LIST).length > 1)
+    {  
+       var gameId    =  Math.random() * 100;
+       var lobby     = new Lobby(gameId,PLAYER_LIST);
+       console.log('inside if player');
+          // this will give the each socket a name and put in list
+    }
     // {
+      //   sent everyone an array
     	  //var player =  Player.update() // CHECK how many right and gieve a % then updat boards with %
     //     var socket = PlayerList[i].id;
     //     socket.emit('updateboard',);
+    //    
     // }
 },10000/5);// this runs every .20 seconds. 
 
