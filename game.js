@@ -8,222 +8,138 @@ var Lobby = require('./lobby.js');
 var PlayerList = {};
 
 //app.use(express.static(path.join(__dirname, 'assets')));
-app.get('/', function(req, res)
-{
-   res.sendFile(__dirname + '/client/main.html'),(__dirname + '/client/assets/css/style.css');
+app.get('/', function(req, res) {
+    res.sendFile(__dirname + '/client/main.html'), (__dirname + '/client/assets/css/style.css');
 });
 
 app.use(express.static('client/'));
-serv.listen(2000); 
-var io = require('socket.io')(serv,{});
+serv.listen(2000);
+var io = require('socket.io')(serv, {});
 
-var rooms = ['room1','room2','room3'];
+var rooms = ['room1', 'room2', 'room3'];
 
-var testArray =  [1,2,3,4,5,6,7,8,9,0];
-var testArray2 = [5,8,3,8,9,2,4,6,7,8];
-var testArray3 = ['','','',''];
+var testArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+var testArray2 = [5, 8, 3, 8, 9, 2, 4, 6, 7, 8];
+var testArray3 = ['', '', '', ''];
 
-var tempArray = ['bill','john','mike','mando','sarah','pip','lucky','christy','katie','maddox','ella'];
+var tempArray = ['bill', 'john', 'mike', 'mando', 'sarah', 'pip', 'lucky', 'christy', 'katie', 'maddox', 'ella'];
 
-var SOCKET_LIST = {};  
+var SOCKET_LIST = {};
 var PLAYER_LIST = {};
-var GAME_LIST   = {};
-var USER_LIST   = {
-                     bob :'abc',
-                     mike:'def',
-                     sam :'ghi',
+var GAME_LIST = {};
+var USER_LIST = {
+    bob: 'abc',
+    mike: 'def',
+    sam: 'ghi',
 
-                    };
+};
 
-Player.connectPlayer = function(socket)
-{
-    var player = Player(socket.id);
+Player.connectPlayer = function(socket) {   // this is where the database code need to go
+    var player = new Player(socket.id);
+    player.setName( tempArray[ Math.floor(10 * Math.random())]);
+    console.log(player.name + " player naem");
     PLAYER_LIST[socket.id] = player;
-   
-    console.log(player.name + "player on connect");
-
+    console.log("player " + JSON.stringify(player));
 }
-Player.disconnect = function(socket)
-{
-    delete SOCKET_LIST[socket.id];
-    delete PLAYER_LIST[socket.id];
-}
-// acivated everytime someone goes to page
+Player.disconnect = function(socket) {
+        delete PLAYER_LIST[socket.id];
+    }
+ 
+io.sockets.on('connection', function(socket) {
+    console.log("connected ");
+    socket.id = Math.random() * 100;
+    Player.connectPlayer(socket);
+    console.log(Object.keys(PLAYER_LIST).length + "player list length");
 
-var isValidPassword = function(data)
-{
-   return USER_LIST[data.name === data.passWord];
-}
-var isUserNameTaken = function(data)
-{
-   return USER_LIST[data.name];
-}
-var addUser = function(data)
-{
-  USER_LIST[data.name] == data.passWord;
-}
-io.sockets.on('connection', function(socket)
-{
-  var connectonCounter = 0; 
- 	console.log("connected ");
- 	socket.id = Math.random() * 100;
- 	SOCKET_LIST[socket.id] = socket; 
-  Player.connectPlayer(socket);
-
-console.log(Object.keys(PLAYER_LIST).length + "player list length");
-
-  //var player = new Player(socket.id);
-  // console.log("player " + JSON.stringify(player));
-  //Player.connect(socket);
-  // socket.on('signIn', function(data)
-  // {
-  //     console.log("user name = " + data.name);
-  //     if(isValidPassword)
-  //     {
-  //        console.log("inside if beb= ");
-  //        Player.connectPlayer(socket);
-  //         // PLAYER_LIST[socket.id] = player;
-  //        //console.log(PLAYER_LIST.length + 'player length');
-  //         socket.emit('signInResponce',{success:true});
-  //     }
-  //     else
-  //     {
-  //       socket.emit('signInResponce',{success:false});
-  //     }
-  //   }); 
-  // socket.on('signUp', function(data)
-  // {
-  //   if(isUserNameTaken)
-  //   {
-  //      socket.emit('signInResponce',{success:false});
-  //   }
-  //   else
-  //   {
-  //     addUser(data);
-  //     socket.emit('signInResponce',{success:true});
-  //   }
-  // });
-   socket.join("room1");
- //  console.log(io.sockets.clients().length + " client length");
-
-   // console.log("socket name #1" + data.name);
-  
- 	 socket.on("numberPressed", function(data) // listens for number pressed
-     {
-        for(var i in data.array)
-        {
-           console.log('array ' + data.array[i]);
-
-        }
-        var numberOfCorrect = checkArray(data.array,testArray);
-        console.log("numberPressed " + numberOfCorrect);
-        var percentComplete = (numberOfCorrect/testArray.length) * 100;
-        player.completed = percentComplete;
-        console.log(percentComplete + " pecent complerte");
-        if(percentComplete === 100)
-        {
-           console.log("winner");
-        }
-     });
- //    sudo code
- //    if SOCKET_LIST == 4
- //    	start game();
-
-   
-
-    socket.on('arrayTester', function(data)
+    socket.on("numberPressed", function(data) // listens for number pressed
     {
-      var numberOfCorrect = checkArray(data,testArray);
-      console.log("numberPressed " + numberOfCorrect);
-      var percentComplete = (numberOfCorrect/testArray.length) * 100;
+            var playerFromList = lobby.getPlayer()
+            var numberOfCorrect = checkArray(data.array, testArray);
+            console.log("numberPressed " + numberOfCorrect);
+            var percentComplete = (numberOfCorrect / testArray.length) * 100;
+            player.completed = percentComplete;
+            console.log(percentComplete + " pecent complerte");
+            if (percentComplete === 100) {
+                console.log("winner");
+            }
+    });
+    socket.on('arrayTester', function(data) {
+        var numberOfCorrect = checkArray(data, testArray);
+        console.log("numberPressed " + numberOfCorrect);
+        var percentComplete = (numberOfCorrect / testArray.length) * 100;
 
-      player.completed = percentComplete;
-      if(percentComplete === 100)
-      {
-        console.log("winner");
-      }
+        player.completed = percentComplete;
+        if (percentComplete === 100) {
+            console.log("winner");
+        }
     })
 
-    socket.emit('testFromServer',
-    {
-       message : 'hi from server'
-    });
-    socket.on("disconnect", function()
-    {
-        delete SOCKET_LIST[socket.id];
+    socket.on("disconnect", function() {         // TODO fix this
         delete PLAYER_LIST[socket.id];
     });
-    socket.on("chatMessage", function(data)
-    {
-      console.log("chat " + data);
-      
-       // console.log("socket name " + PLAYER_LIST[i].player.name);
-       // socket.emit("addchat", ": " + data);
-        var playerName = (" "+ socket.id).slice(2,4);
-        for(var i in SOCKET_LIST)
-        {
-          SOCKET_LIST[i].emit("addchat", playerName + ": " + data);
+
+
+    socket.on("chatMessage", function(data) {   // TODO fix this
+        console.log("chat " + data);
+
+        // console.log("socket name " + PLAYER_LIST[i].player.name);
+        // socket.emit("addchat", ": " + data);
+        var playerName = (" " + socket.id).slice(2, 4);
+        for (var i in SOCKET_LIST) {
+            PLAYER_LIST[i].emit("addchat", playerName + ": " + data);
         }
-      
+
     });
 
-});  // end of io on
-// var startGame = fucntion(PlayerList.length)
-// {  
-	// set every player ids
-   // create same board = PlayerList.length;
-   // give everyone their board
-   // give everyone an id == math random
-//}
-var checkArray = function(ary1,ary2)
-{
-  var correctAnsewers = 0;
-   for(var i = 0; i < ary1.length; i++)
-   {
-      if(parseInt(ary1[i]) === parseInt(ary2[i]))
-      { 
-        correctAnsewers ++;
-      }
+}); // end of io on
 
-   }
-   return correctAnsewers;
+var checkArray = function(ary1, ary2) {            // TODO move this
+    var correctAnsewers = 0;
+    for (var i = 0; i < ary1.length; i++) {
+        if (parseInt(ary1[i]) === parseInt(ary2[i])) {
+            correctAnsewers++;
+        }
+
+    }
+    return correctAnsewers;
 }
-console.log( "check array " + checkArray(testArray,testArray2));
-console.log("%correct " + (checkArray(testArray,testArray2)/10) * 100);
+console.log("check array " + checkArray(testArray, testArray2));
+console.log("%correct " + (checkArray(testArray, testArray2) / 10) * 100);
 
 
-setInterval(function()
-{  
+setInterval(function() {                             // TODO maybe 2 of these??
 
     var packet = [];
-    //console.log(SOCKET_LIST.length + "length of SOCKET_LIST");
-    for(var i in PLAYER_LIST)
-    {
-       var player = PLAYER_LIST[i];
-       console.log("player.name " + player.name);
-       packet.push({
-                	 name:player.name,
-                   });
+   
+    for (var i in PLAYER_LIST) {
+        var player = PLAYER_LIST[i];
+       // console.log("player.name " + player.name);
+        packet.push({
+            name: player.name,
+        });
+         var socket = PLAYER_LIST[i];
+        // socket.emit("updateBoard", packet);
     }
-     for(var i in SOCKET_LIST)
-    {
-    	var socket = SOCKET_LIST[i];
-        socket.emit("updateBoard",packet); 
-    }
-    if(Object.keys(PLAYER_LIST).length > 1)
-    {  
-       var gameId    =  Math.random() * 100;
-       var lobby     = new Lobby(gameId,PLAYER_LIST);
-       console.log('inside if player');
-          // this will give the each socket a name and put in list
+    // for (var i in SOCKET_LIST) {
+    //     var socket = SOCKET_LIST[i];
+    //     socket.emit("updateBoard", packet);
+    //}
+     console.log(Object.keys(PLAYER_LIST).length + "player list length in setInterval");
+    if (Object.keys(PLAYER_LIST).length > 1) {
+        console.log('inside if player');
+        //var gameId = Math.random() * 100;
+       // var lobby = new Lobby(gameId, PLAYER_LIST);
+       // lobby.id = gameID;
+        //GAME_LIST[gameID] = lobby;
+      
+       
+      
     }
     // {
-      //   sent everyone an array
-    	  //var player =  Player.update() // CHECK how many right and gieve a % then updat boards with %
+    //   sent everyone an array
+    //var player =  Player.update() // CHECK how many right and gieve a % then updat boards with %
     //     var socket = PlayerList[i].id;
     //     socket.emit('updateboard',);
     //    
     // }
-},10000/5);// this runs every .20 seconds. 
-
-
+}, 10000 / 5); // this runs every 2 seconds.
