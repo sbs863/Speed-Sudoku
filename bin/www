@@ -31,7 +31,7 @@ server.on('listening', onListening);
 
 
 var io = require('socket.io').listen(server);
-// require('../game')(io);
+require('../game')(io);
 /**
  * Normalize a port into a number, string, or false.
  */
