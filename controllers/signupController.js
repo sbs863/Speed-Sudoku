@@ -7,7 +7,6 @@ module.exports.show = function(req, res) {
 }
 
 module.exports.signup = function(req, res) {
-    console.dir(req.body);
     var flash = require('connect-flash');
     var username = req.body.username;
     var password = req.body.password;

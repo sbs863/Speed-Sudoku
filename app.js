@@ -5,9 +5,9 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var MySQLStore = require('express-mysql-session')(session);
 var index = require('./routes/index');
 var flash = require('connect-flash');
-var sessions = require('express-session');
 var setupPassport = require('./setupPassport');
 var app = express();
 
@@ -16,19 +16,48 @@ app.use(flash());
 console.log('start cookie')
 app.use(cookieParser());
 console.log('start session')
-app.use(session({ secret: 'wo9iijbnegl3kdn5k3fqw', resave: false, saveUninitialized: false }))
+app.use(session({
+    secret: 'wo9iijbnegl3kdn5k3fqw',
+    resave: false,
+    saveUninitialized: false,
+    store: new MySQLStore({
+        host: 'localhost',
+        user: 'root',
+        password: 'Targetmith!2354',
+        database: 'speedsudoku_db',
+    }),
+    schema: {
+        tableName: 'sessions',
+        columnNames: {
+            session_id: 'session_id',
+            expires: 'expires',
+            data: 'test',
+
+        },
+    }
+}));
 
 
 // view engine setup
+// var hbs = ehandlebars.create({
+//     defaultLayout: 'app',
+//     helpers: {
+//         section: function(name, options) {
+//             if (!this._sections) this._sections = {}
+//             this._sections[name] = options.fn(this)
+//             return null
+//         }
+//     }
+// });
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+// app.use(favicon(path.join(__dirname, 'public')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, './public')));
 console.log('start router')
 setupPassport(app);
 var appRouter = require('./routes/index.js')(app);

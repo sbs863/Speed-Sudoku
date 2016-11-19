@@ -1,25 +1,60 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Sudoku game</title>
-	<link rel="stylesheet" type="text/css" href="assets/css/style.css">  
+    <title>Sudoku Game</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Cinzel" rel="stylesheet">
+    <!-- load fontawesome -->
+    <!--<link rel="stylesheet" href="../public/stylesheets/reset.css"/> -->
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
 </head>
+
 <body>
-<h1>suduku</h1>
+    <h1 class="jumbotron" style="text-align:center; background-color:beige;">Sudoku</h1>
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <div id="chat_board" style="width:100%; height:400px; overflow-y:scroll;">
+            <div class="well trash" style="text-align:center; background-color:beige; border: black;
+		border-width: 1px;">Trash Talk</div>
+        </div>
+        <form id="chat_form">
+            <input id="chat_text" type="text" onclick="openNav()" style="width:93%">
+        </form>
+        <br>
+        <button class="btn btn-large rules" data-toggle="modal" data-target="#myModal">Rules</button>
+    </div>
+    <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; Chat and Rules</span>
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Sudoku Rules</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Each puzzle consists of a 9x9 grid containing given clues in various places. The object is to fill all empty squares so that the numbers 1 to 9 appear exactly once in each row, column and 3x3 box.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "250px";
+        document.getElementById("main").style.marginLeft = "250px";
+    }
 
-<div id="player_login">
-	User Name: <input id="user_name" type="text" ><br>
-	User PassWord: <input id="user_password" type="text" ><br>
-	<button id="sign_in">Sign In</button>
-	<button id="sign_up">Sign up</button>
-</div>
-
-<div id="chat_board" style="width:500px; height:100px; overflow-y:scroll;">
-	<div>Trash Talk</div>
-</div>
-<form id="chat_form">
-  <input id="chat_text" type="text"  style ="width:500px"> 
-</form>
+    function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+        document.getElementById("main").style.marginLeft = "0";
+    }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 
 <script src ="https://cdn.socket.io/socket.io-1.4.5.js"></script>
