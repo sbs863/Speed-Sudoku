@@ -28,7 +28,7 @@ body {
     /*background: white;*/
 }
 
-#rules {
+.rules1 {
     display: flex;
     justify-content: space-around;
 }
