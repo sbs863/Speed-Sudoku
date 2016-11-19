@@ -13,15 +13,15 @@ module.exports = function(app) {
                 where: {
                     'username': username
                 }
-            }).then(function(user) {
-                if (user === null) {
+            }).then(function(users) {
+                if (users === null) {
                     return done(null, false, { message: 'Incorrect credentials.' });
                 }
 
-                var hashedPassword = bcrypt.hashSync(password, user.salt);
+                var hashedPassword = bcrypt.hashSync(password, users.salt);
 
-                if (user.password === hashedPassword) {
-                    return done(null, user);
+                if (users.password === hashedPassword) {
+                    return done(null, users);
                 }
 
                 return done(null, false, { message: 'Incorrect credentials.' });
@@ -29,8 +29,8 @@ module.exports = function(app) {
         }
     ));
 
-    passport.serializeUser(function(user, done) {
-        done(null, user.id)
+    passport.serializeUser(function(users, done) {
+        done(null, users.id)
     });
 
     passport.deserializeUser(function(id, done) {
@@ -38,12 +38,12 @@ module.exports = function(app) {
             where: {
                 'id': id
             }
-        }).then(function(user) {
-            if (user == null) {
+        }).then(function(users) {
+            if (users == null) {
                 done(new Error('Wrong user id.'));
             }
 
-            done(null, user);
+            done(null, users);
         });
     });
 

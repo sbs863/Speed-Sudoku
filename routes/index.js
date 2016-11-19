@@ -17,7 +17,7 @@ module.exports = function(app) {
     app.post('/signup', signupController.signup);
 
     app.post('/login', passport.authenticate('local', {
-        successRedirect: '/dashboard',
+        successRedirect: '/main',
         failureRedirect: '/',
         failureFlash: true
     }));
@@ -28,8 +28,8 @@ module.exports = function(app) {
         });
     });
 
-    app.get('/dashboard', isAuthenticated, function(req, res) {
-        res.render('dashboard');
+    app.get('/main', isAuthenticated, function(req, res) {
+        res.render('main');
     })
 
     app.get('/login', function(req, res, next) {
@@ -45,4 +45,3 @@ module.exports = function(app) {
     })
 
 }
-

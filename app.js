@@ -13,7 +13,9 @@ var app = express();
 
 
 app.use(flash());
+console.log('start cookie')
 app.use(cookieParser());
+console.log('start session')
 app.use(session({ secret: 'wo9iijbnegl3kdn5k3fqw', resave: false, saveUninitialized: false }))
 
 
@@ -27,7 +29,8 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
-
+console.log('start router')
+setupPassport(app);
 var appRouter = require('./routes/index.js')(app);
 app.use('/', index);
 
@@ -53,7 +56,6 @@ app.use(function(req, res, next) {
     res.locals.errorMessage = res.flash('error')
     next()
 });
-
-setupPassport(app);
+// console.log('pasport init')
 
 module.exports = app;
