@@ -1,119 +1,100 @@
-
 <!DOCTYPE html>
 <html>
+
 <head>
-	<title>Sudoku game</title>
-	<link rel="stylesheet" type="text/css" href="assets/css/style.css">  
+    <title>Sudoku game</title>
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
 </head>
+
 <body>
-<h1>suduku</h1>
+    <h1>suduku</h1>
 
-<div id="player_login">
-	User Name: <input id="user_name" type="text" ><br>
-	User PassWord: <input id="user_password" type="text" ><br>
-	<button id="sign_in">Sign In</button>
-	<button id="sign_up">Sign up</button>
-</div>
+    <div id="player_login">
+        User Name: <input id="user_name" type="text"><br> User PassWord: <input id="user_password" type="text"><br>
+        <button id="sign_in">Sign In</button>
+        <button id="sign_up">Sign up</button>
+    </div>
 
-<div id="chat_board" style="width:500px; height:100px; overflow-y:scroll;">
-	<div>Trash Talk</div>
-</div>
-<form id="chat_form">
-  <input id="chat_text" type="text"  style ="width:500px"> 
-</form>
+    <div id="chat_board" style="width:500px; height:100px; overflow-y:scroll;">
+        <div>Trash Talk</div>
+    </div>
+    <form id="chat_form">
+        <input id="chat_text" type="text" style="width:500px">
+    </form>
 
 
-<script src ="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-<script type="text/javascript">
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script type="text/javascript">
+        var socket = io();
 
-var	socket = io();
+        // var playerLoginDiv = document.getElementById('player_login');
+        // var userName = document.getElementById('user_name');
+        // var passWord = document.getElementById('user_password');
+        // var userSignIn = document.getElementById('sign_in');
+        // var userSignUp = document.getElementById('sign_up');
 
-var playerLoginDiv =  document.getElementById('player_login');
-var userName = document.getElementById('user_name');
-var passWord = document.getElementById('user_password');
-var userSignIn = document.getElementById('sign_in');
-var userSignUp = document.getElementById('sign_up');
+        var chatBoard = document.getElementById('chat_board');
+        var chatText = document.getElementById('chat_text');
+        var chatForm = document.getElementById('chat_form');
+        var userTestArray = ["", "", "", "", "", "", "", "", "", ""];
 
-var chatBoard = document.getElementById('chat_board');
-var chatText = document.getElementById('chat_text');
-var chatForm = document.getElementById('chat_form');
-var userTestArray = ["","","","","","","","","",""];
+        var playerName;
+        var socketId;
+        var gameId;
+        
+        socket.on('playerObject', function(data){
+            
+             console.log('chend if working' + data.name);
+             console.log("player " + JSON.stringify(data));
+             playerName = data.name;
+             socketId = data.id;
 
-4
+        });
+        
+        socket.on('checkForWinner',function(data) {
+            console.log(data.message);
+        });
+        socket.on("startGame", function(data) {
+            console.log(data.message);
 
-userSignIn.onclick = function()
-{
-	//console.log("userName " + userName.value);
-	socket.emit('signIn', 
-	{
-		name: userName.value,
-		passWord: passWord.value
-	});
-}	
-socket.on("signInResponce", function(data)
-{
-	if(data.success == true)
-	{
-		//playerLoginDiv.style.display = "none";
-		console.log("sign in success");
-	}
-	else 
-	{
-		console.log("bad sing in");
-	}
+        });
+        socket.on("addchat", function(data) {
+            console.log("receiving data " + data);
+            chatBoard.innerHTML += '<div>' + data + '</div>';
+        });
+        chatForm.onsubmit = function(data) {
+            data.preventDefault();
+            socket.emit('chatMessage', chatText.value,playerName);
+            chatText.value = "";
+        }
+        document.addEventListener("keydown", function(event) // 48 - 57 or 
+            {
 
-});
+                console.log(" key down event " + event.which);
+                if ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105)) // something wrong 
+                {
+                    // need a function to update local game
+                    var testArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+                    userTestArray[Math.floor(10 * Math.random())] = String.fromCharCode(event.which);
+                    console.log(socketId + 'socketId');
+                    socket.emit('numberPressed', {
+                        number: String.fromCharCode(event.which),
+                        array: testArray,
+                        sock: socketId,
+                    });
+                } else {
+                    return null;
+                }
+                console.log("number pushed " + String.fromCharCode(event.which));
+            });
 
-socket.on("testFromServer", function(data) 
-{
-  console.log(data.message);
- 
-});  
-socket.on("addchat", function(data) 
-{
-  console.log("receiving data " + data);
-  chatBoard.innerHTML += '<div>' + data + '</div>';
-
-});  
-chatForm.onsubmit = function(data)
-{
-	data.preventDefault();
-	socket.emit('chatMessage',chatText.value);
-	chatText.value = "";
-}
-document.addEventListener("keydown", function(event)  // 48 - 57 or 
-{
-
-	  console.log(" key down event " + event.which);
-	  if ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105))  // something wrong with num pad
-	  {
-		  // need a function to update local game
-		  var testArray =  [1,2,3,4,5,6,7,8,9,0];
-          userTestArray[Math.floor(10 * Math.random())] = String.fromCharCode(event.which);
-		  socket.emit('numberPressed',
-	       {
-	  	     number:String.fromCharCode(event.which),
-	  	     array:testArray,
-	       });
-	  }
-	  else
-	  {
-	  	return null;
-	  }
-	  console.log("number pushed "+ String.fromCharCode(event.which)); 
-});
-
-socket.on("updateBoard", function(data) 
-{
-	console.log(data.length);
-  for(var i = 0; i < data.length; i++)
-  {
-         console.log(data[i].name);
-  }
-});  
-
-</script>
+        socket.on("updateBoard", function(data) {
+            console.log(data.length);
+            for (var i = 0; i < data.length; i++) {
+                console.log(data[i].name);
+            }
+        });
+    </script>
 </body>
+
 </html>
-
-

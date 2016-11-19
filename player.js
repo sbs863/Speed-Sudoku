@@ -3,10 +3,11 @@ console.log('uploading player.js');
 function Player(playerId){
 	this.id =  playerId;
 	this.name = "";
-	this.avalible  = false;
+	this.avalible  = true;
 	this.complete = 0;
 	this.wins = 0;
 	this.losses = 0;
+	this.isWinner = false;
 };
 
 Player.prototype.setName = function(name){
