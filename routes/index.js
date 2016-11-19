@@ -20,7 +20,7 @@ module.exports = function(app) {
 
     app.post('/login', passport.authenticate('local', {
 
-        successRedirect: '/main',
+        successRedirect: '/game',
         failureRedirect: '/',
         failureFlash: true,
     }), function(req, res) {
@@ -31,7 +31,7 @@ module.exports = function(app) {
                 if (req.body.password === user.password) {
                     // sets a cookie with the user's info
                     req.session.user = user;
-                    res.redirect('/main');
+                    res.redirect('/game');
                 } else {
                     res.flash('error', 'error:Invalid email or password.');
 
@@ -47,8 +47,8 @@ module.exports = function(app) {
         });
     });
 
-    app.get('/main', isAuthenticated, function(req, res) {
-        res.render('main');
+    app.get('/game', isAuthenticated, function(req, res) {
+        res.render('Game');
     })
 
     app.get('/login', function(req, res, next) {
