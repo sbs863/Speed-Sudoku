@@ -5,6 +5,8 @@
  *
  * @author Moriel Schottlender
  */
+
+var cellIdNum = 0;
 var Sudoku = ( function ( $ ){
 	var _instance, _game,
 		/**
@@ -150,7 +152,9 @@ var Sudoku = ( function ( $ ){
 
 				for ( var j = 0; j < 9; j++ ) {
 					// Build the input
+					cellIdNum++;
 					this.$cellMatrix[i][j] = $( '<input>' )
+						.attr( 'id', 'C'+cellIdNum)
 						.attr( 'maxlength', 1 )
 						.data( 'row', i )
 						.data( 'col', j )
@@ -173,7 +177,9 @@ var Sudoku = ( function ( $ ){
 				$table.append( $tr );
 			}
 			// Return the GUI table
+			
 			return $table;
+
 		},
 
 		/**
