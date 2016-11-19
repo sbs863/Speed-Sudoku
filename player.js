@@ -8,6 +8,8 @@ function Player(playerId){
 	this.wins = 0;
 	this.losses = 0;
 	this.isWinner = false;
+	this.gameId = 0;
+	this.unSolvedArray = [];
 };
 
 Player.prototype.setName = function(name){
@@ -19,10 +21,21 @@ Player.prototype.setWins = function(wins){
 Player.prototype.setLosses = function(losses){
 	this.losses = losses;
 };
+Player.prototype.setAvalible = function(bool) {
+	this.avalible = bool;
+};
 Player.prototype.setComplete = function(complete){
 	return this.complete;
 };
-
+Player.prototype.setPlayerGameId = function(gameId) {
+	this.gameId = gameId;
+Player.prototype.setUnsolvedArray = function(array) {
+	this.unSolvedArray = array;
+};
+Player.prototype.setIsWinner = function(bool) {
+	this.this.isWinner();
+};
+};
 Player.prototype.getName = function(){
 	return this.name;
 };
@@ -35,6 +48,11 @@ Player.prototype.getLosses = function(){
 Player.prototype.getComplete = function(){
 	return this.complete;
 };
-
+Player.prototype.getGameId = function() {
+	return this.gameId;
+};
+Player.prototype.getUnsolvedArray = function() {
+	return unSolvedArray;
+};
 
 module.exports = Player;

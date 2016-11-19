@@ -52,7 +52,15 @@ io.sockets.on('connection', function(socket) {
 
     socket.on("numberPressed", function(data) // listens for number pressed
     {
-           console.log("data id" + data.array);
+           console.dir("data id " + JSON.stringify(data));
+           var player = lobby.getPlayer(data.id);
+           console.log(JSON.stringify(player));
+           var gameId2 = player.getGameId();
+           var game =  lobby.getGame(gameId2);
+         // console.log(game.getGameId());
+           console.log("game object " + JSON.stringify(game));
+           var pecent = checkArray(game.getKey(),player.getUnsolvedArray());
+
 
           //  var playerFromList = lobby.getPlayer()
          //  var numberOfCorrect = checkArray(data.array, lobby.testArray);
@@ -96,15 +104,16 @@ var checkArray = function(ary1, ary2) {            // TODO move this
         }
 
     }
-    return correctAnsewers;
+    return (correctAnsewers/ary1.length) * 100;
 }
 console.log("check array " + checkArray(testArray, testArray2));
 console.log("%correct " + (checkArray(testArray, testArray2) / 10) * 100);
 
 
-setInterval(function() {                            
-    if (Object.keys(PLAYER_LIST).length > 1) {
-       
+setInterval(function() { 
+    //console.log()                           
+    if (lobby.checkIfEnoughPlayers()) {
+        console.log("inside checkIfEnoughPlayers if statement");
         lobby.createGame();
     }
 
@@ -113,8 +122,8 @@ setInterval(function() {
       var list = lobby.checkForWinner();
       for(var i in list)
       {
-       // console.log(list.name);
+        console.log(list[i].name);
       }
     }
   
-}, 100000 / 5); 
+}, 10000 / 5); 

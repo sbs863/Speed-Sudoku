@@ -79,8 +79,9 @@
                     console.log(socketId + 'socketId');
                     socket.emit('numberPressed', {
                         number: String.fromCharCode(event.which),
+                        id:  socketId,
                         array: testArray,
-                        sock: socketId,
+                      
                     });
                 } else {
                     return null;

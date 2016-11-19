@@ -7,15 +7,17 @@ function  SudokuGame(gameId)
 	this.gameId =  gameId;
 	this.done   = false;
 	this.maxPlayers = 5;
-	this.arrayKey      = [];
+	this.arrayKey      = [1,2,3];
 	this.arrayUnsolved = [];
 };
-// SudokuGame.prototype.setGameId = function(this.gameId) {
-// 	for(var i in this.gamePlayerList.length)
-// 	{
-// 		this.gamePlayerList[i]gameId = gameId;
-// 	}
-// };
+SudokuGame.prototype.setGameId = function(gameId) {
+	// for(var i in this.gamePlayerList.length)
+	// {
+	// 	this.gamePlayerList[i]gameId = gameId;
+	// }
+	this.gameId = gameId;
+
+};
 SudokuGame.prototype.addPlayer = function(player) {
 	this.gamePlayerList.push(player);
 };
@@ -30,13 +32,13 @@ SudokuGame.prototype.sizeLimit = function() {
 	else{return false;}
 };
 
-SudokuGame.prototype.checkForWinner = function(){
+SudokuGame.prototype.checkGameWinner = function(){
 	console.log("checkForWinner" + this.gamePlayerList.length);
 	for(var i in this.gamePlayerList)
 	{
 		if(this.gamePlayerList[i].complete == 100)
 			{
-				// remove players
+				this.gamePlayerList[i].isWinner == true;
 				return true;
 			}
 		else{return false;}
@@ -57,6 +59,9 @@ SudokuGame.prototype.startGame = function(){
      
   }
 }
+SudokuGame.getKey = function() {
+	return this.arrayKey;
+};
 SudokuGame.prototype.timmer = function(){
 	 var counter = 60;
      setInterval(function(){
