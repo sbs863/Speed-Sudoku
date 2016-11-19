@@ -25,6 +25,7 @@ app.use(session({
         user: 'root',
         password: 'Targetmith!2354',
         database: 'speedsudoku_db',
+        port: process.env.PORT || '3306'
     }),
     schema: {
         tableName: 'sessions',
