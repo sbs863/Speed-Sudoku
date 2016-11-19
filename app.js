@@ -21,10 +21,10 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     store: new MySQLStore({
-        host: 'us-cdbr-iron-east-04.cleardb.net',
-        user: 'b9723c903890fd',
-        password: '9207bc9b4',
-        database: 'heroku_27616b284f8028c',
+        host: 'localhost',
+        user: 'root',
+        password: 'Targetmith!2354',
+        database: 'speedsudoku_db',
         port: process.env.PORT || '3306'
     }),
     schema: {

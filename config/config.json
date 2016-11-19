@@ -1,9 +1,9 @@
 {
     "development": {
-        "username": "b9723c903890fd",
-        "password": "9207bc9b",
-        "database": "heroku_27616b284f8028c",
-        "host": "us-cdbr-iron-east-04.cleardb.net",
+        "username": "root",
+        "password": "Targetmith!2354",
+        "database": "speedsudoku_db",
+        "host": "127.0.0.1",
         "dialect": "mysql"
     },
     "test": {
@@ -14,10 +14,10 @@
         "dialect": "mysql"
     },
     "production": {
-        "username": "b9723c903890fd",
-        "password": "9207bc9b",
-        "database": "heroku_27616b284f8028c",
-        "host": "us-cdbr-iron-east-04.cleardb.net",
+        "username": "root",
+        "password": "null",
+        "database": "speedsudoku_db",
+        "host": "127.0.0.1",
         "dialect": "mysql"
     }
 }
